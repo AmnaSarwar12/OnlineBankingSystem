@@ -1,0 +1,106 @@
+﻿@page
+@model OnlineBankingSystem.Pages.Accounts.AccountPageModel
+@{
+   ViewData["Title"] = "Login";
+}
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary text-center">Account Summary</h2>
+    @if (Model.bankAccount != null)
+{
+        <div class="card shadow-lg mb-5 p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>📄 Account Number:</strong> @Model.bankAccount.AccountNumber</p>
+                    <p><strong>🏦 Account Type:</strong> @Model.bankAccount.AccountType</p>
+                    <p><strong>📅 Opened On:</strong> @Model.bankAccount.OpenedOn.ToShortDateString()</p>
+                 </div>
+                <div class="col-md-6">
+                    <p><strong>💰 Balance:</strong> <span class="text-success fw-bold">$@Model.bankAccount.Balance.ToString("N2")</span></p>
+                    <p><strong>🔒 Status:</strong> @Model.bankAccount.Status</p>
+                </div>
+                <div class="mb-3">
+                    <a asp-page="/Deposit/depositPage" asp-route-accountId="@Model.bankAccount.id" class="btn btn-success me-2 px-4">➕ Deposit</a>
+                    <a asp-page="/Withdrawl/WithDrawlPage" asp-route-accountId="@Model.bankAccount.id" class="btn btn-danger px-4">➖ Withdraw</a>
+                </div>
+        </div>
+     </div>
+}
+else
+{
+        <div class="alert alert-warning text-center">⚠️ No account found for this user.</div>
+}
+
+<h4 class="mb-3">Recent Transaction</h4>
+@if(Model.bankAccount.Transactions?.Any() == true && Model.bankAccount.Transactions != null)
+{
+        <table class="table table-bordered table-striped">
+            <thread class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Amount ($)</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Balance</th>
+            </tr>
+        </thread>
+        @{
+            decimal runningBalance = Model.bankAccount.Balance;
+        }
+        <tbody>
+                @foreach (var txn in Model.PagedTransaction)
+                {
+                    <tr>
+                        <td>@txn.Id</td>
+                        <td class="@(txn.Description == "Withdrawl" ? "text-danger" : "text-success")">
+                            @(txn.Description == "Withdrawl" ? "- $" : "+ $")@txn.Amount.ToString("N2")
+                        </td>
+                        <td>@txn.TimeStamp.ToString("MMMM dd, yyyy")</td>
+                        <td>
+                            @(txn.Description == "Withdrawl" ? "💸 Withdrawl" : "💰 Deposit")
+                        </td>
+                        <td><strong>$@runningBalance.ToString("N2")</strong></td>
+                    </tr>
+
+                    
+                        //reverse update the balance after showing it
+                        runningBalance -= (txn.Description == "Withdrawl" ? -txn.Amount : txn.Amount);
+                    
+                }
+        </tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <!--<button class="btn btn-secondary"
+                    asp-route-id="@Model.bankAccount.id"
+                    asp-route-PageNumber="@(Model.PageNumber - 1)"
+                    disabled="@(Model.PageNumber == 1)">
+                ← Previous
+            </button>-->
+            <a class="btn btn-secondary @(Model.PageNumber == Model.TotalPages ? "disabled" : "")"
+               asp-route-id="@Model.bankAccount.id"
+               asp-route-PageNumber="@(Model.PageNumber - 1)">
+               ← Previous
+            </a>
+
+
+            <span>Page @Model.PageNumber of @Model.TotalPages</span>
+
+            <!--<button class="btn btn-secondary"
+                    asp-route-id="@Model.bankAccount.id"
+                    asp-route-PageNumber="@(Model.PageNumber + 1)"
+                    disabled="@(Model.PageNumber == Model.TotalPages)">
+                Next →
+            </button>-->
+            <a class="btn btn-secondary @(Model.PageNumber == Model.TotalPages ? "disabled" : "")"
+               asp-route-id="@Model.bankAccount.id"
+               asp-route-PageNumber="@(Model.PageNumber + 1)">
+                Next →
+            </a>
+        </div>
+    }
+    else
+    { 
+       <div class="alert alert-info">No transactions available.</div>
+    }
+</div>
+
+

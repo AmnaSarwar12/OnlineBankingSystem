@@ -1,0 +1,28 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Welcome To Bank";
+}
+
+<div class="conatiner py-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+            <h1 class="display-5 fw-bold mb-4 text-primary">
+                Welcome To <span class="text-dark">OnlineBank</span>
+            </h1>
+            <p class="lead mb-4">
+                Manage your finances with ease and security. From account overviews to transfers, bill payments, deposits, and withdrawals — your money, your way.
+            </p>
+            <a class="btn btn-primary btn-lg me-2" asp-page="/Register/RegistrationPage">
+                <i class="bi bi-person-plus"></i> Create Account
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" asp-page="/Login/LoginPage">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+        </div>
+        <div class="col-md-6 text-center mt-4 mt-md-0">
+            <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Bank Illustration" class="img-fluid" style="max-height: 300px;" />
+        </div>
+    </div>
+     
+</div>

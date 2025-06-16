@@ -1,0 +1,86 @@
+﻿@page
+@model OnlineBankingSystem.Pages.Transfer.TransferPageModel
+@{
+    ViewData["Title"] = "Transfer Money";
+}
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow p-4" style="width:450px;">
+        <h3 class="text-center mb-4"><i class="bi bi-arrow-left-right"></i> Transfer Money</h3>
+        <form method="post" class="mt-4" id="transferForm">
+            <div class="mb-3">
+                <label asp-for="ToAccountNumber" class="form-label">To Account Number</label>
+                <input asp-for="ToAccountNumber" class="form-control" placeholder="Enter recipient's account number" />
+                <span asp-validation-for="ToAccountNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Amount" class="form-label">Amount</label>
+                <input asp-for="Amount" class="form-control" placeholder="Enter amount to transfer" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#confirmModal">Transfer</button>
+        </form>
+        <!--Confirmation Modal-->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="confirmModalLabel">Confirm Transfer</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to transfer
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" onclick="submitTransferForm()">Yes, Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger mt-3">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <div>@error.ErrorMessage</div>
+                    }
+                </div>
+            }
+
+            @if (TempData["Success"] != null)
+            {
+            <div class="alert alert-success mt-3">@TempData["Success"]</div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger mt-3">@TempData["Error"]</div>
+            }
+
+    </div>
+    
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["Success"]';
+            var errorMessage = '@TempData["Error"]';
+
+            if (successMessage === 'True') {
+                toastr.success('Transfer Money Sucessfull!', 'Success');
+            }
+
+            if (errorMessage === 'True') {
+                toastr.error('No Account Was Found', 'Error');
+            }
+        });
+        //function confirmTransfer(){
+           // return confirm('Are you sure you want to transfer this amount?');
+        //}
+        function submitTransferForm(){
+            document.getElementById('transferForm').submit();
+        }
+    </script>
+}

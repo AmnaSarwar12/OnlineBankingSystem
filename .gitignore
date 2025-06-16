@@ -1,0 +1,23 @@
+﻿# Ignore Visual Studio working folder
+.vs/
+
+# Build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+
+# Log files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Secrets or local config
+appsettings.Development.json

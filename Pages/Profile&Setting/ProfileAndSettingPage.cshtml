@@ -1,0 +1,93 @@
+﻿@page
+@model OnlineBankingSystem.Pages.Profile_Setting.ProfileAndSettingPageModel
+@{
+    ViewData["title"] = "Profile & Setting Page";
+
+}
+<div class="conatiner mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4 text-center"><i class="fas fa-user-cog me-2"></i>Profile & Setting</h2>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <!-- Profile Image Upload -->
+                            <div class="text-center mb-4">
+                                <img src="~/images/default-profile.png" class="rounded-circle" style="width: 100px; height: 100px;" alt="Profile Image" />
+                                <div class="mt-2">
+                                    <input type="file" class="form-control form-control-sm" />
+                                    <small class="text-muted">Upload profile picture (optional)</small>
+                                </div>
+                            </div>
+
+                            <!-- Tabs -->
+                            <ul class="nav nav-tabs mb-3" id="profileTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">Profile Info</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button" role="tab">Change Password</button>
+                                </li>
+                            </ul>
+
+                                <form method="post" enctype="multipart/form-data">
+                                    <div class="tab-content" id="profileTabsContent">
+                                        <!-- Profile Info Tab -->
+                                        <div class="tab-pane fade show active" id="info" role="tabpanel">
+                                            <div class="mb-3">
+                                                <label asp-for="ProfileInput.Name" class="form-label">
+                                                    <i class="fas fa-user me-1"></i>Name
+                                                </label>
+                                                <input asp-for="ProfileInput.Name" class="form-control" placeholder="Enter your full name" />
+                                                <span asp-validation-for="ProfileInput.Name" class="text-danger"></span>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label asp-for="ProfileInput.Email" class="form-label">
+                                                    <i class="fas fa-envelope me-1"></i>Email
+                                                </label>
+                                                <input asp-for="ProfileInput.Email" class="form-control" placeholder="Enter your email" />
+                                                <span asp-validation-for="ProfileInput.Email" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Change Password Tab -->
+                                        <div class="tab-pane fade" id="password" role="tabpanel">
+                                            <div class="mb-3">
+                                                <label asp-for="ProfileInput.NewPassword" class="form-label">
+                                                    <i class="fas fa-key me-1"></i>New Password
+                                                </label>
+                                                <input asp-for="ProfileInput.NewPassword" class="form-control" type="password" placeholder="Leave blank to keep current password" />
+                                                <span asp-validation-for="ProfileInput.NewPassword" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid mt-3">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-1"></i>Update Profile
+                                        </button>
+                                    </div>
+                                </form>
+
+                            @if (TempData["Success"] != null)
+                            {
+                            <div class="alert alert-success mt-3 text-center">@TempData["Success"]</div>
+                                }
+                                @if (TempData["Error"] != null)
+                                {
+                            <div class="alert alert-danger mt-3 text-center">@TempData["Error"]</div>
+                                }
+                            <div class="text-center mt-4">
+                                <a asp-page="/DashBoard/DashboardPage" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                                </a>
+                            </div>
+           
+            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

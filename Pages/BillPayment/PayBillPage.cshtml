@@ -1,0 +1,84 @@
+﻿@page
+@model OnlineBankingSystem.Pages.PayBill.PayBillPageModel
+@{
+    ViewData["title"] = "Paybill";
+}
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow p-4" style="width:450px;">
+        <h3 class="text-center text-primary mb-4">💡 Pay Your Bills</h3>
+
+        <form method="post" id="payBillForm">
+            <div class="mb-3">
+                <label asp-for="FromAccountId" class="form-label  fw-semibold">From Account</label>
+                <select asp-for="FromAccountId" class="form-select">
+                    <option value="">-- Select Account --</option>
+                    @foreach (var account in Model.UserAccounts)
+                    {
+                        <option value="@account.id">@account.AccountNumber - $@account.Balance</option>
+                    }
+                </select>
+                <span asp-validation-for="FromAccountId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="BillNumber" class="form-label  fw-semibold">Bill Number</label>
+                <input asp-for="BillNumber" class="form-control" placeholder="e.g., 987654321" />
+                <span asp-validation-for="BillNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Amount" class="form-label fw-semibold">Amount</label>
+                <input asp-for="Amount" class="form-control" placeholder="$0.00" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#confirmModal">💸 Pay Now</button>
+        </form>
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="confirmModalLabel">Confirm Bill Payment</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to Pay this Bill?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" onclick="submitBillPaymentForm()">Yes, Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            @if (!ModelState.IsValid)
+            {
+                        <div class="text-danger">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <p>@error.ErrorMessage</p>
+                            }
+            </div>
+            }
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var billsuccess = '@TempData["BillSuccess"]';
+            if (billsuccess === 'True') {
+                toastr.success('Pay Bill successful!', 'Success');
+            }
+        });
+        function submitBillPaymentForm(){
+            document.getElementById('payBillForm').submit();
+        }
+
+    </script>
+}
+
+
+
+
+
